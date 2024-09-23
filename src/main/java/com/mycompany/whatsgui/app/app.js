@@ -17,21 +17,6 @@ client.on('qr', qr => {
 
 client.on('message', async message => {
     let msg = message.body.toLowerCase().trim(); 
-    let hello_msg = `
- goooll
-
-de placa e de trivela
-no cantinho
-pra comemorar
-
-!!!!!	
-`;
-    if (msg.includes('consultar')) {
-        if (msg.startsWith('consultar ')) {
-            const parametro = msg.slice(10).trim();
-            await message.reply('ola meu nome eh quinzeconto');
-        } else {
-            await message.reply(hello_msg);}
-    } else {
-        await message.reply(hello_msg);}
+// MAIN-MSG-BEGIN
+// USER-TYPE-BEGIN
 });
