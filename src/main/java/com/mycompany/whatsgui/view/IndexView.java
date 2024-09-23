@@ -162,8 +162,10 @@ public class IndexView extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void generateFile(String mainMsg) {
+    private void generateFile(String mainMsg, String userType, String botResponse) {
         File arquivo = new File("/home/victor/NetBeansProjects/WhatsGUI/src/main/java/com/mycompany/whatsgui/app.js");
+        int userTypeLength = userType.length();
+        
 
         try {
             // Cria o arquivo se ele não existir
@@ -217,6 +219,9 @@ public class IndexView extends javax.swing.JFrame {
                 // writer.write("    // seu código aqui");
                 // writer.newLine();
                 
+                writer.write("    let msg = message.body.toLowerCase().trim(); ");
+                writer.newLine();
+                
                 // MAIN MESSAGE
                 writer.write("    let hello_msg = `");
                 writer.newLine();
@@ -224,6 +229,26 @@ public class IndexView extends javax.swing.JFrame {
                 writer.newLine();
                 writer.write("`;");
                 writer.newLine();
+                
+                // USER TYPE WORD
+                writer.write("    if (msg.includes('"+userType+"')) {");
+                writer.newLine();
+                writer.write("        if (msg.startsWith('"+userType+ " " + "')) {");
+                writer.newLine();
+                writer.write("            const parametro = msg.slice("+ (userTypeLength + 1) +").trim();");
+                writer.newLine();
+                writer.write("            await message.reply('"+botResponse+"');");
+                writer.newLine();
+                writer.write("        } else {");
+                writer.newLine();
+                writer.write("            await message.reply(hello_msg);}");
+                writer.newLine();
+                writer.write("    } else {");
+                writer.newLine();
+                writer.write("        await message.reply(hello_msg);}");
+                writer.newLine();
+                
+                
                 // ###########################
 
                 writer.write("});");
@@ -240,7 +265,9 @@ public class IndexView extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         String mainMsg = txtMainMsg.getText();
-        generateFile(mainMsg);
+        String userType = txtUserWord.getText();
+        String botResponse = txtResponse.getText();
+        generateFile(mainMsg, userType, botResponse);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtUserWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserWordActionPerformed
