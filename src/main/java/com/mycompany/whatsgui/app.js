@@ -16,7 +16,15 @@ client.on('qr', qr => {
 });
 
 client.on('message', async message => {
-let hello_msg = `
-aaaaaaa
+    let hello_msg = `
+asdasdasd
+asd
+a
+
+asd
+as
+/d
+as
+/dasdsdasd
 `;
 });
