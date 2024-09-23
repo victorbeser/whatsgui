@@ -1,6 +1,3 @@
-com\mycompany\whatsgui\view\IndexView$1.class
-com\mycompany\whatsgui\WhatsGUI.class
-com\mycompany\whatsgui\view\IndexView.class
-com\mycompany\whatsgui\view\IndexView$2.class
-com\mycompany\whatsgui\view\IndexView$3.class
-com\mycompany\whatsgui\view\IndexView$4.class
+com/mycompany/whatsgui/view/MainMessageView.class
+com/mycompany/whatsgui/view/MainMessageView$1.class
+com/mycompany/whatsgui/view/MainMessageView$2.class

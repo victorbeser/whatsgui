@@ -18,14 +18,5 @@ client.on('qr', qr => {
 client.on('message', async message => {
     let msg = message.body.toLowerCase().trim(); 
 // MAIN-MSG-BEGIN
-let main_msg = "A empresa QuinzeConto
-
-Agradece sua participação!
-
-Hehe";
-
-Agradece sua participação!
-
-Hehe";
 // USER-TYPE-BEGIN
 });

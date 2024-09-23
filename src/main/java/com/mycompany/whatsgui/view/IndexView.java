@@ -4,6 +4,7 @@
  */
 package com.mycompany.whatsgui.view;
 
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,6 +17,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
 import javax.swing.SwingUtilities;
 
 /**
@@ -24,7 +29,7 @@ import javax.swing.SwingUtilities;
  */
 public class IndexView extends javax.swing.JFrame {
 
-    public String appFilePath = "src\\main\\java\\com\\mycompany\\whatsgui\\app\\app.js";
+    public String appFilePath = "src/main/java/com/mycompany/whatsgui/app/app.js";
 
     /**
      * Creates new form IndexView
@@ -222,16 +227,35 @@ public class IndexView extends javax.swing.JFrame {
         }
     }
 
+    // REMOVE MAIN MESSAGE
+    public void removeMainMessage(String mainMessage) {
+        Path path = Paths.get(appFilePath);
+
+        try {
+            // Lê todas as linhas do arquivo
+            List<String> lines = Files.readAllLines(path);
+
+            // Filtra as linhas, excluindo as que começam com "let main_msg"
+            List<String> updatedLines = lines.stream()
+                    .filter(line -> !line.trim().startsWith("let main_msg"))
+                    .collect(Collectors.toList());
+
+            // Escreve as linhas filtradas de volta no arquivo
+            Files.write(path, updatedLines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // ADD MAIN MESSAGE
     private void addMainMessage(String mainMessage) {
         
-        System.out.println("Adding new main message...");
-        
+        removeMainMessage(mainMessage);
+
         File arquivo = new File(appFilePath);
         StringBuilder conteudo = new StringBuilder();
         String texto = """
-                       let main_msg = "%s";
-                       """.formatted(mainMessage);
+                       let main_msg = "%s";""".formatted(mainMessage);
 
         // Lê o arquivo e guarda o conteúdo em um StringBuilder
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo), StandardCharsets.UTF_8))) {
@@ -239,11 +263,17 @@ public class IndexView extends javax.swing.JFrame {
             boolean dentroDaSecao = false;
 
             while ((linha = reader.readLine()) != null) {
+                if (linha.trim().equals("""
+                                        let main_msg = `%s`;
+                                        """.formatted(mainMessage))) {
+                    System.out.println("Equals let main_msg");
+                }
+
                 // Verifica se está dentro da seção desejada
                 if (linha.trim().equals("// MAIN-MSG-BEGIN")) {
                     dentroDaSecao = true;
-                }
 
+                }
                 // Adiciona a linha atual ao conteúdo
                 conteudo.append(linha).append(System.lineSeparator());
 
@@ -255,7 +285,7 @@ public class IndexView extends javax.swing.JFrame {
             }
             System.out.println("Main message added");
         } catch (IOException e) {
-            System.out.println("Error: "+e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         // Escreve o conteúdo de volta no arquivo
@@ -265,15 +295,16 @@ public class IndexView extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    
+    public void getAddMainMessage(String mainMessage) {
+        addMainMessage(mainMessage);
+    }
 
     // GENERATE BASE FILE
     private void generateFile() {
-        System.out.println("Configuring the application file path");
         File arquivo = new File(appFilePath);
 //        String caminhoAbsoluto = arquivo.getAbsolutePath();
 //        System.out.println("Caminho absoluto: " + caminhoAbsoluto);
-
-        System.out.println("Initializating");
 
         try {
             // Cria o arquivo se ele não existir
@@ -379,8 +410,10 @@ public class IndexView extends javax.swing.JFrame {
 
     private void btnMainMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMsgActionPerformed
         // TODO add your handling code here:
-        String msg = "Hello World";
-        addMainMessage(msg);
+//        String msg = "Hello World";
+//        addMainMessage(msg);
+        MainMessageView mainMessageViewFrame = new MainMessageView();
+        mainMessageViewFrame.setVisible(true);
 
     }//GEN-LAST:event_btnMainMsgActionPerformed
 
