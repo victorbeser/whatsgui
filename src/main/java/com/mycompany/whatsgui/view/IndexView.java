@@ -237,7 +237,7 @@ public class IndexView extends javax.swing.JFrame {
 
             // Filtra as linhas, excluindo as que começam com "let main_msg"
             List<String> updatedLines = lines.stream()
-                    .filter(line -> !line.trim().startsWith("let main_msg"))
+                    .filter(line -> !line.trim().startsWith("let main_msg ="))
                     .collect(Collectors.toList());
 
             // Escreve as linhas filtradas de volta no arquivo
@@ -249,13 +249,15 @@ public class IndexView extends javax.swing.JFrame {
 
     // ADD MAIN MESSAGE
     private void addMainMessage(String mainMessage) {
-        
+
         removeMainMessage(mainMessage);
+        mainMessage = mainMessage.replace("\n", "\\n");
 
         File arquivo = new File(appFilePath);
         StringBuilder conteudo = new StringBuilder();
         String texto = """
-                       let main_msg = "%s";""".formatted(mainMessage);
+    let main_msg = `%s`;
+    """.formatted(mainMessage);
 
         // Lê o arquivo e guarda o conteúdo em um StringBuilder
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo), StandardCharsets.UTF_8))) {
@@ -263,9 +265,7 @@ public class IndexView extends javax.swing.JFrame {
             boolean dentroDaSecao = false;
 
             while ((linha = reader.readLine()) != null) {
-                if (linha.trim().equals("""
-                                        let main_msg = `%s`;
-                                        """.formatted(mainMessage))) {
+                if (linha.trim().equals(texto)) {
                     System.out.println("Equals let main_msg");
                 }
 
@@ -295,7 +295,7 @@ public class IndexView extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     public void getAddMainMessage(String mainMessage) {
         addMainMessage(mainMessage);
     }
