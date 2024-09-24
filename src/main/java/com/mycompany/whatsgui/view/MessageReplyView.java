@@ -4,6 +4,24 @@
  */
 package com.mycompany.whatsgui.view;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author joao.bsantos
@@ -13,8 +31,12 @@ public class MessageReplyView extends javax.swing.JFrame {
     /**
      * Creates new form MessageReplyView
      */
-    public MessageReplyView() {
+    private IndexView indexViewFrame;
+
+    public MessageReplyView(IndexView indexViewFrame) {
+        this.indexViewFrame = indexViewFrame;
         initComponents();
+        loadData();
     }
 
     /**
@@ -26,21 +48,477 @@ public class MessageReplyView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        btnAddMessageReply = new javax.swing.JButton();
+        txtMessage = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtReply = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblMessageReply = new javax.swing.JTable();
+        btnRemoveMessageReply = new javax.swing.JButton();
+        btnLoadRows = new javax.swing.JButton();
+
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(110, 192, 147));
+
+        jLabel2.setFont(new java.awt.Font("Courier 10 Pitch", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Message");
+
+        jLabel3.setFont(new java.awt.Font("Courier 10 Pitch", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Reply");
+
+        btnAddMessageReply.setText("Add");
+        btnAddMessageReply.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddMessageReplyActionPerformed(evt);
+            }
+        });
+
+        txtMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMessageActionPerformed(evt);
+            }
+        });
+
+        txtReply.setColumns(20);
+        txtReply.setRows(5);
+        jScrollPane1.setViewportView(txtReply);
+
+        tblMessageReply.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Message", "Reply"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblMessageReply);
+        if (tblMessageReply.getColumnModel().getColumnCount() > 0) {
+            tblMessageReply.getColumnModel().getColumn(0).setResizable(false);
+            tblMessageReply.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tblMessageReply.getColumnModel().getColumn(1).setResizable(false);
+            tblMessageReply.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        btnRemoveMessageReply.setText("Remove");
+        btnRemoveMessageReply.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveMessageReplyActionPerformed(evt);
+            }
+        });
+
+        btnLoadRows.setText("Load data");
+        btnLoadRows.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadRowsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnAddMessageReply, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                                    .addComponent(txtMessage, javax.swing.GroupLayout.Alignment.LEADING))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnLoadRows, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnRemoveMessageReply, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(58, 58, 58))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddMessageReply)
+                    .addComponent(btnRemoveMessageReply)
+                    .addComponent(btnLoadRows))
+                .addContainerGap(58, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    // VERIFY IF EXISTS }); END OF APP.JS
+    public static void verificaEAdiciona(String caminhoArquivo) {
+        String linha;
+        String ultimaLinha = null;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo))) {
+            while ((linha = br.readLine()) != null) {
+                ultimaLinha = linha;
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+            return;
+        }
+
+        // Verifica se a última linha não contém "});"
+        if (ultimaLinha != null && !ultimaLinha.trim().endsWith("});")) {
+            adicionarLinha(caminhoArquivo);
+        }
+    }
+
+    public static void adicionarLinha(String caminhoArquivo) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(caminhoArquivo, true))) {
+            bw.write("});");
+            bw.newLine(); // Adiciona uma nova linha após
+            System.out.println("Linha '});' adicionada ao final do arquivo.");
+        } catch (IOException e) {
+            System.out.println("Erro ao escrever no arquivo: " + e.getMessage());
+        }
+    }
+
+    // REMOVE BLOCK
+    private void removeBlock(int rowIndex) {
+        System.out.println("RemoveBlock Linha: " + rowIndex);
+
+        // Verificar se o índice da linha é válido
+//        if (rowIndex < 1 || rowIndex > tblMessageReply.getRowCount()) {
+//            System.out.println("Linha selecionada inválida.");
+//            return; // Sai da função se a linha não é válida
+//        }
+        String filePath = indexViewFrame.appFilePath; // caminho do arquivo
+        try {
+            // Ler o arquivo
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+
+            // Marcadores para o bloco a ser removido
+            String startMarker = "// MESSAGE-REPLY-ROW-" + rowIndex;
+            String endMarker = "// MESSAGE-REPLY-ROW-" + rowIndex;
+
+            boolean inBlock = false; // Indica se estamos dentro do bloco
+            List<String> linesToKeep = new ArrayList<>(); // Linhas que manteremos
+
+            for (String line : lines) {
+                if (line.equals(startMarker)) {
+                    inBlock = true; // Começa a ignorar linhas
+                    continue; // Pula a linha do marcador de início
+                } else if (line.equals(endMarker)) {
+                    inBlock = false; // Termina de ignorar linhas
+                    continue; // Pula a linha do marcador de fim
+                }
+
+                if (!inBlock) {
+                    linesToKeep.add(line); // Mantém a linha se não está no bloco
+                }
+            }
+
+            // Escrever de volta no arquivo, removendo as linhas do bloco
+            Files.write(Paths.get(filePath), linesToKeep);
+
+            verificaEAdiciona(filePath);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ADD MAIN MESSAGE
+    private void addMessageReplyCode(String message, String reply, int row) {
+
+//        removeMainMessage(mainMessage);
+//        message = message.replace("\n", "\\n");
+        reply = reply.replace("\n", "\\n");
+
+        File arquivo = new File(indexViewFrame.appFilePath);
+        StringBuilder conteudo = new StringBuilder();
+        String texto = String.format("""
+        // MESSAGE-REPLY-ROW-%d                             
+        if (msg.includes('%s')) {
+            if (msg.startsWith('%s ')) {
+                const parametro = msg.slice(%d).trim();
+                await message.reply('%s');
+            } else {
+                await message.reply("teste");
+            }
+        } else {
+            await message.reply("teste");
+        }
+        // MESSAGE-REPLY-ROW-%d
+        """, row, message, message, (message.length() + 1), reply, row);
+
+        // Lê o arquivo e guarda o conteúdo em um StringBuilder
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo), StandardCharsets.UTF_8))) {
+            String linha;
+            boolean dentroDaSecao = false;
+
+            while ((linha = reader.readLine()) != null) {
+                if (linha.trim().equals(texto)) {
+                    System.out.println("Equals");
+                }
+
+                // Verifica se está dentro da seção desejada
+                if (linha.trim().equals("// MESSAGE-REPLY-BEGIN")) {
+                    dentroDaSecao = true;
+
+                }
+                // Adiciona a linha atual ao conteúdo
+                conteudo.append(linha).append(System.lineSeparator());
+
+                // Adiciona o texto se estiver dentro da seção
+                if (dentroDaSecao && linha.trim().equals("// MESSAGE-REPLY-BEGIN")) {
+                    conteudo.append(texto).append(System.lineSeparator());
+                    dentroDaSecao = false; // Reseta a flag
+                }
+            }
+//            indexViewFrame.getTxtConsoleOutput();
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        // Escreve o conteúdo de volta no arquivo
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(arquivo), StandardCharsets.UTF_8))) {
+            writer.write(conteudo.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void txtMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMessageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMessageActionPerformed
+
+    private void addMessageReply() {
+        String msg = txtMessage.getText();
+        String reply = txtReply.getText();
+
+        DefaultTableModel model = (DefaultTableModel) tblMessageReply.getModel();
+        int itemId = (model.getRowCount() + 1);
+        model.addRow(new Object[]{itemId, msg, reply});
+
+        int newRowIndex = model.getRowCount();
+        addMessageReplyCode(msg, reply, newRowIndex);
+
+        txtMessage.setText("");
+        txtReply.setText("");
+        indexViewFrame.getTxtConsoleOutput("Message & Reply added: " + msg + " & " + reply + "\n");
+        JOptionPane.showMessageDialog(null, "Message & Reply added!");
+    }
+
+    private void btnAddMessageReplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMessageReplyActionPerformed
+        // TODO add your handling code here:
+        addMessageReply();
+    }//GEN-LAST:event_btnAddMessageReplyActionPerformed
+
+    private void removeMessageReply() {
+        int selectedRow = tblMessageReply.getSelectedRow();
+        int columnID = (int) tblMessageReply.getValueAt(selectedRow, 0);
+        System.out.println("Column ID: " + columnID);
+        removeBlock(columnID);
+        if (selectedRow != 1) {
+            DefaultTableModel model = (DefaultTableModel) tblMessageReply.getModel();
+            model.removeRow(selectedRow);
+            JOptionPane.showMessageDialog(null, "Message & Reply removed!");
+            indexViewFrame.getTxtConsoleOutput("Message & Reply removed line: " + selectedRow + "\n");
+        } else {
+            indexViewFrame.getTxtConsoleOutput("You must select a row to remove");
+            JOptionPane.showMessageDialog(null, "Select a row to remove!");
+        }
+    }
+
+    private void btnRemoveMessageReplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveMessageReplyActionPerformed
+        // TODO add your handling code here:
+        removeMessageReply();
+    }//GEN-LAST:event_btnRemoveMessageReplyActionPerformed
+
+    // ADD LOAD DATA TABLE
+    private void addToTable(List<String> ids, List<String> includes, List<String> replies) {
+        DefaultTableModel model = (DefaultTableModel) tblMessageReply.getModel();
+
+        // Limpar a tabela antes de adicionar novos dados
+        model.setRowCount(0);
+
+        // Adicionar os valores na tabela
+        for (int i = 0; i < includes.size(); i++) {
+            model.addRow(new Object[]{includes.get(i), replies.get(i)});
+        }
+    }
+
+    // LOAD DATA
+    private void loadData() {
+        String filePath = indexViewFrame.appFilePath; // caminho do arquivo
+        try {
+            // Ler o arquivo
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+
+            // Listas para armazenar os resultados
+            List<String> includes = new ArrayList<>();
+            List<String> replies = new ArrayList<>();
+            List<String> ids = new ArrayList<>();
+
+            // Variável temporária para armazenar o nome do animal
+            String currentAnimal = "";
+
+            // Iterar sobre as linhas do arquivo
+            for (String line : lines) {
+
+                if (line.contains("// MESSAGE-REPLY-ROW-")) {
+                    // Extrair o número após "// MESSAGE-REPLY-ROW-"
+                    String id = line.substring(line.indexOf("// MESSAGE-REPLY-ROW-") + "// MESSAGE-REPLY-ROW-".length());
+                    id = id.trim(); // Remove espaços em branco, se necessário
+
+                    // Adiciona o ID à lista
+                    ids.add(id);
+                }
+
+                // Verificar se a linha contém 'msg.includes('
+                if (line.contains("msg.includes('")) {
+                    // Extrair o valor do animal
+                    String animal = line.substring(line.indexOf("'") + 1, line.lastIndexOf("'"));
+                    includes.add(animal);
+//                    currentAnimal = animal; // Atualiza o animal atual
+                }
+
+                // Verificar se a linha contém 'await message.reply('
+                if (line.contains("await message.reply('")) {
+                    // Extrair a resposta
+                    String reply = line.substring(line.indexOf("'") + 1, line.lastIndexOf("'"));
+                    replies.add(reply); // Adiciona a resposta à lista
+                }
+            }
+
+            // Exibir os resultados
+//            for (int i = 0; i < includes.size(); i++) {
+//                System.out.println("msg.includes: " + includes.get(i));
+//                System.out.println("await message.reply: " + replies.get(i));
+//            }
+            addToTable(ids, includes, replies);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // LOAD DATA BTN
+    private void btnLoadRowsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadRowsActionPerformed
+        // TODO add your handling code here:
+
+        String filePath = indexViewFrame.appFilePath; // caminho do arquivo
+        try {
+            // Ler o arquivo
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+
+            // Listas para armazenar os resultados
+            List<String> includes = new ArrayList<>();
+            List<String> replies = new ArrayList<>();
+            List<String> ids = new ArrayList<>();
+
+            // Variável temporária para armazenar o nome do animal
+            String currentAnimal = "";
+
+            // Iterar sobre as linhas do arquivo
+            for (String line : lines) {
+
+                if (line.contains("// MESSAGE-REPLY-ROW-")) {
+                    // Extrair o número após "// MESSAGE-REPLY-ROW-"
+                    String id = line.substring(line.indexOf("// MESSAGE-REPLY-ROW-") + "// MESSAGE-REPLY-ROW-".length());
+                    id = id.trim(); // Remove espaços em branco, se necessário
+
+                    // Adiciona o ID à lista
+                    ids.add(id);
+                }
+                // Verificar se a linha contém 'msg.includes('
+                if (line.contains("msg.includes('")) {
+                    // Extrair o valor do animal
+                    String animal = line.substring(line.indexOf("'") + 1, line.lastIndexOf("'"));
+                    includes.add(animal);
+                    currentAnimal = animal; // Atualiza o animal atual
+                }
+
+                // Verificar se a linha contém 'await message.reply('
+                if (line.contains("await message.reply('")) {
+                    // Extrair a resposta
+                    String reply = line.substring(line.indexOf("'") + 1, line.lastIndexOf("'"));
+                    replies.add(reply); // Adiciona a resposta à lista
+                }
+            }
+
+            // Exibir os resultados
+//            for (int i = 0; i < includes.size(); i++) {
+//                System.out.println("msg.includes: " + includes.get(i));
+//                System.out.println("await message.reply: " + replies.get(i));
+//            }
+            addToTable(ids, includes, replies);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_btnLoadRowsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -72,11 +550,23 @@ public class MessageReplyView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MessageReplyView().setVisible(true);
+                new MessageReplyView(null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddMessageReply;
+    private javax.swing.JButton btnLoadRows;
+    private javax.swing.JButton btnRemoveMessageReply;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblMessageReply;
+    private javax.swing.JTextField txtMessage;
+    private javax.swing.JTextArea txtReply;
     // End of variables declaration//GEN-END:variables
 }
