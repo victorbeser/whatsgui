@@ -4,6 +4,9 @@
  */
 package com.mycompany.whatsgui.view;
 
+import com.mycompany.whatsgui.view.IndexView;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author victor
@@ -13,7 +16,10 @@ public class MainMessageView extends javax.swing.JFrame {
     /**
      * Creates new form MainMessage
      */
-    public MainMessageView() {
+    private IndexView indexViewFrame;
+    
+    public MainMessageView(IndexView indexViewFrame) {
+        this.indexViewFrame = indexViewFrame;
         initComponents();
     }
 
@@ -101,7 +107,8 @@ public class MainMessageView extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         String mainMessage = txtMainMessage.getText();
-        IndexView indexViewFrame = new IndexView();
+        indexViewFrame.getTxtConsoleOutput("Added main message");
+        JOptionPane.showMessageDialog(null, "Added main message!");
         indexViewFrame.getAddMainMessage(mainMessage);
         
     }//GEN-LAST:event_btnAddMainMessageActionPerformed
@@ -137,7 +144,7 @@ public class MainMessageView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainMessageView().setVisible(true);
+                new MainMessageView(null).setVisible(true);
             }
         });
     }

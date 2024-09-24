@@ -18,7 +18,5 @@ client.on('qr', qr => {
 client.on('message', async message => {
     let msg = message.body.toLowerCase().trim(); 
 // MAIN-MSG-BEGIN
-
-
 // USER-TYPE-BEGIN
 });

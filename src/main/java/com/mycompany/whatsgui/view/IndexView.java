@@ -21,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 /**
@@ -36,7 +38,8 @@ public class IndexView extends javax.swing.JFrame {
      */
     public IndexView() {
         initComponents();
-        redirectConsole();
+//        redirectConsole();
+        txtConsoleOutput.append("#######################\n\n   Welcome to WhatsGUI!   \n\n#######################\n\n");
     }
 
     /**
@@ -166,7 +169,15 @@ public class IndexView extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void setTxtConsoleOutput(String log) {
+        txtConsoleOutput.append(log);
+    }
+    
+    public void getTxtConsoleOutput(String log) {
+        setTxtConsoleOutput(log);
+    }
+    
     // SHOW IN CONSOLE
     private void redirectConsole() {
         OutputStream outputStream = new OutputStream() {
@@ -283,7 +294,7 @@ public class IndexView extends javax.swing.JFrame {
                     dentroDaSecao = false; // Reseta a flag
                 }
             }
-            System.out.println("Main message added");
+            txtConsoleOutput.append("Main message added\n");
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -309,9 +320,9 @@ public class IndexView extends javax.swing.JFrame {
         try {
             // Cria o arquivo se ele não existir
             if (arquivo.createNewFile()) {
-                System.out.println("Generating application file...");
+                txtConsoleOutput.append("Generating application file...\n");
             } else {
-                System.out.println("Restarting application file...");
+                txtConsoleOutput.append("Restarting application file...\n");
             }
 
             // Escreve o conteúdo no arquivo
@@ -396,23 +407,24 @@ public class IndexView extends javax.swing.JFrame {
                 writer.write("});");
                 writer.newLine();
 
-                System.out.println("The file has been restarted");
+                txtConsoleOutput.append("The file has been restarted\n");
             }
         } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            txtConsoleOutput.append("Error: " + e.getMessage());
         }
     }
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
         generateFile();
+        JOptionPane.showMessageDialog(null, "App file has been restarted!");
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnMainMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMsgActionPerformed
         // TODO add your handling code here:
 //        String msg = "Hello World";
 //        addMainMessage(msg);
-        MainMessageView mainMessageViewFrame = new MainMessageView();
+        MainMessageView mainMessageViewFrame = new MainMessageView(this);
         mainMessageViewFrame.setVisible(true);
 
     }//GEN-LAST:event_btnMainMsgActionPerformed
