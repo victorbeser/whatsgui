@@ -404,7 +404,7 @@ public class MessageReplyView extends javax.swing.JFrame {
 
         // Adicionar os valores na tabela
         for (int i = 0; i < includes.size(); i++) {
-            model.addRow(new Object[]{includes.get(i), replies.get(i)});
+            model.addRow(new Object[]{ids.get(i), includes.get(i), replies.get(i)});
         }
     }
 
